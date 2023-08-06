@@ -1,0 +1,23 @@
+{
+    "name": "epifrin/rector-custom-rules",
+    "description": "Now these are two rector rules to convert private method name and local variable name to camel case",
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "rector/rector": "^0.17.10"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Epifrin\\RectorCustomRules\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "epifrin",
+            "email": "epifrin@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
