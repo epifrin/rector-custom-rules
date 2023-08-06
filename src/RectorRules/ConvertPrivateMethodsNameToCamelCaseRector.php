@@ -7,6 +7,8 @@ use Epifrin\RectorCustomRules\Helpers\StringHelper;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,9 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
 {
+    private array $privateMethods = [];
+
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, StaticCall::class, MethodCall::class];
+        return [Class_::class, ClassMethod::class, StaticCall::class, MethodCall::class];
     }
 
     /**
@@ -34,6 +38,14 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
 
         if ($node instanceof StaticCall) {
             return $this->refactorStaticCall($node);
+        }
+
+        if ($node instanceof ClassLike) {
+            foreach ($node->getMethods() as $method) {
+                if ($method->isPrivate()) {
+                    $this->privateMethods[] = $method->name->toString();
+                }
+            }
         }
 
         return null;
@@ -64,6 +76,11 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
         }
 
         $methodCallName = $this->getName($node->name);
+
+        if (!in_array($methodCallName, $this->privateMethods, true)) {
+            return null;
+        }
+
         $newMethodCallName = StringHelper::toCamelCase($methodCallName);
 
         if ($methodCallName === $newMethodCallName) {
@@ -77,16 +94,23 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
 
     private function refactorStaticCall(StaticCall $node): ?Node
     {
-        if ($node->class instanceof Node\Name && $node->class->toString() === 'self') {
-            $methodCallName = $this->getName($node->name);
-            $newMethodCallName = StringHelper::toCamelCase($methodCallName);
-
-            if ($methodCallName === $newMethodCallName) {
-                return null; // Skip if the name is already in camelCase
-            }
-
-            $node->name = new Node\Identifier($newMethodCallName);
+        if (!($node->class instanceof Node\Name) || $node->class->toString() !== 'self') {
+            return null;
         }
+
+        $methodCallName = $this->getName($node->name);
+
+        if (!in_array($methodCallName, $this->privateMethods, true)) {
+            return null;
+        }
+
+        $newMethodCallName = StringHelper::toCamelCase($methodCallName);
+
+        if ($methodCallName === $newMethodCallName) {
+            return null; // Skip if the name is already in camelCase
+        }
+
+        $node->name = new Node\Identifier($newMethodCallName);
 
         return $node;
     }
@@ -98,20 +122,30 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 class MyClass
 {
-private function is_snake_case()
-{
-// Some code here
-}
+    public function do()
+    {
+        return $this->is_snake_case();
+    }
+    
+    private function is_snake_case()
+    {
+        // Some code here
+    }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 class MyClass
 {
-private function isSnakeCase()
-{
-// Some code here
-}
+    public function do()
+    {
+        return $this->isSnakeCase();
+    }
+    
+    private function isSnakeCase()
+    {
+        // Some code here
+    }
 }
 CODE_SAMPLE
             ),
