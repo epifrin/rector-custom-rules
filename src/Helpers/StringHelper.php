@@ -7,7 +7,7 @@ final class StringHelper
 {
     public static function toCamelCase(string $string): string
     {
-        $words = explode(' ', preg_replace(['-', '_'], ' ', $string));
+        $words = explode(' ', str_replace(['-', '_'], ' ', $string));
 
         $studlyWords = array_map(static fn($word) => ucfirst($word), $words);
 
