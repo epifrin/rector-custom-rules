@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Epifrin\RectorCustomRules;
+namespace Epifrin\RectorCustomRules\RectorRules;
 
+use Epifrin\RectorCustomRules\Helpers\StringHelper;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
@@ -33,7 +35,7 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
             return null;
         }
 
-        $newName = $this->toCamelCase($currentName);
+        $newName = StringHelper::toCamelCase($currentName);
 
         if ($newName === 'this') {
             return null;
@@ -62,14 +64,5 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
                 '$myVariable = 1;'
             ),
         ]);
-    }
-
-    private function toCamelCase(string $str): string
-    {
-        $words = explode(' ', preg_replace(['-', '_'], ' ', $str));
-
-        $studlyWords = array_map(fn($word) => ucfirst($word), $words);
-
-        return lcfirst(implode($studlyWords));
     }
 }

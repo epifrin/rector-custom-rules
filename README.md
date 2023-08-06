@@ -10,8 +10,8 @@ composer require --dev epifrin/rector-custom-rules
 Add to your rector config
 
 ```php
-$rectorConfig->rule(\Epifrin\RectorCustomRules\ConvertPrivateMethodsNameToCamelCaseRector::class);
-$rectorConfig->rule(\Epifrin\RectorCustomRules\ConvertLocalVariablesNameToCamelCaseRector::class);
+$rectorConfig->rule(\Epifrin\RectorCustomRules\RectorRules\ConvertPrivateMethodsNameToCamelCaseRector::class);
+$rectorConfig->rule(\Epifrin\RectorCustomRules\RectorRules\ConvertLocalVariablesNameToCamelCaseRector::class);
 ```
 
 ## Rector rules
@@ -41,9 +41,15 @@ class SomeClass
     {
 -        $this->my_private_method();
 +        $this->myPrivateMethod();
+
+-        self::my_static_private_method();
++        self::myStaticPrivateMethod();
     }
     
 -    private function my_private_method() {}
 +    private function myPrivateMethod() {}
+
+-    private static function my_static_private_method() {}
++    private static function myStaticPrivateMethod() {}
 }
 ```

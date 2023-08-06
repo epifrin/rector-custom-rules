@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Epifrin\RectorCustomRules;
+namespace Epifrin\RectorCustomRules\RectorRules;
 
+use Epifrin\RectorCustomRules\Helpers\StringHelper;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -44,7 +46,7 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
         }
 
         $oldName = $node->name->toString();
-        $newName = $this->toCamelCase($oldName);
+        $newName = StringHelper::toCamelCase($oldName);
 
         if ($oldName === $newName) {
             return null; // Skip if the name is already in camelCase
@@ -62,7 +64,7 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
         }
 
         $methodCallName = $this->getName($node->name);
-        $newMethodCallName = $this->toCamelCase($methodCallName);
+        $newMethodCallName = StringHelper::toCamelCase($methodCallName);
 
         if ($methodCallName === $newMethodCallName) {
             return null; // Skip if the name is already in camelCase
@@ -77,7 +79,7 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
     {
         if ($node->class instanceof Node\Name && $node->class->toString() === 'self') {
             $methodCallName = $this->getName($node->name);
-            $newMethodCallName = $this->toCamelCase($methodCallName);
+            $newMethodCallName = StringHelper::toCamelCase($methodCallName);
 
             if ($methodCallName === $newMethodCallName) {
                 return null; // Skip if the name is already in camelCase
@@ -87,15 +89,6 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
         }
 
         return $node;
-    }
-
-    private function toCamelCase(string $str): string
-    {
-        $words = explode(' ', preg_replace(['-', '_'], ' ', $str));
-
-        $studlyWords = array_map(fn($word) => ucfirst($word), $words);
-
-        return lcfirst(implode($studlyWords));
     }
 
     public function getRuleDefinition(): RuleDefinition
