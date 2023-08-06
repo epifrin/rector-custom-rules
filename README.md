@@ -6,6 +6,14 @@ Now these are two rector rules to convert private method name and local variable
 composer require --dev epifrin/rector-custom-rules
 ```
 
+## Usage
+Add to your rector config
+
+```php
+$rectorConfig->rule(\Epifrin\RectorCustomRules\ConvertPrivateMethodsNameToCamelCaseRector::class);
+$rectorConfig->rule(\Epifrin\RectorCustomRules\ConvertLocalVariablesNameToCamelCaseRector::class);
+```
+
 ## Rector rules
 
 ### Convert local variable's name to camel case

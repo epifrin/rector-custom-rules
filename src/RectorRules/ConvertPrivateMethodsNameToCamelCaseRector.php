@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class ConvertPrivateMethodsNameToCamelCase extends AbstractRector
+final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
 {
     public function getNodeTypes(): array
     {
