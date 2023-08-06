@@ -1,7 +1,14 @@
 # Rector Custom Rules
 Now these are two rector rules to convert private method name and local variable name to camel case
 
-## Convert local variable's name to camel case
+## Installation
+```bash
+composer require --dev epifrin/rector-custom-rules
+```
+
+## Rector rules
+
+### Convert local variable's name to camel case
 ```diff
 class SomeClass 
 {
@@ -16,7 +23,7 @@ class SomeClass
 }
 ```
 
-## Convert private method's name to camel case
+### Convert private method's name to camel case
 Why only private method? Because it's more safe to change private method's name than public method's name.
 
 ```diff
