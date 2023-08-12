@@ -24,7 +24,7 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod|StaticCall|MethodCall $node
+     * @param ClassMethod|StaticCall|MethodCall|ClassLike $node
      */
     public function refactor(Node $node): ?Node
     {
