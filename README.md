@@ -1,5 +1,5 @@
 # Rector Custom Rules
-Now these are two rector rules to convert private method name and local variable name to camel case
+These are three rector rules to convert private method name, to convert local variable name to camel case and to replace double quotes with single quotes in string literals.
 
 ## Installation
 ```bash
@@ -7,16 +7,17 @@ composer require --dev epifrin/rector-custom-rules
 ```
 
 ## Usage
-Add to your rector config
+Add the following to your rector config:
 
 ```php
 $rectorConfig->rule(\Epifrin\RectorCustomRules\RectorRules\ConvertPrivateMethodsNameToCamelCaseRector::class);
 $rectorConfig->rule(\Epifrin\RectorCustomRules\RectorRules\ConvertLocalVariablesNameToCamelCaseRector::class);
+$rectorConfig->rule(\Epifrin\RectorCustomRules\RectorRules\ReplaceDoubleQuotesWithSingleRector::class);
 ```
 
 ## Rector rules
 
-### Convert local variable's name to camel case
+### Convert local variable names to camel case
 ```diff
 class SomeClass 
 {
@@ -31,8 +32,8 @@ class SomeClass
 }
 ```
 
-### Convert private method's name to camel case
-Why only private method? Because it's more safe to change private method's name than public method's name.
+### Convert private method names to camel case
+Why only private methods? Because it's safer to change private method names than public or protected method names.
 
 ```diff
 class SomeClass 
@@ -53,3 +54,24 @@ class SomeClass
 +    private static function myStaticPrivateMethod() {}
 }
 ```
+
+### Replace double quotes with single
+This rule replaces double quotes with single quotes in string literals. It does not replace double quotes if the string literal contains variables or substitutions.
+
+Here is an example of how this rule works:
+
+```diff
+class SomeClass
+{
+    public function someMethod()
+    {
+-        $string = "This is a simple string";
++        $string = 'This is a simple string';
+
+-        $stringWithVariable = "Hello, $name";
++        $stringWithVariable = "Hello, $name";
+
+-        $stringWithSpecialChar = "String with special char: \n";
++        $stringWithSpecialChar = "String with special char: \n";
+    }
+}
