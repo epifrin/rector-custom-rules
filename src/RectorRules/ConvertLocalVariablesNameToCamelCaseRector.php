@@ -34,11 +34,23 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassLike) {
+            // Get properties declared in the class body
             foreach ($node->getProperties() as $property) {
                 if (isset($property->props[0])) {
                     $this->properties[] = $property->props[0]->name->toString();
                 }
             }
+
+            // Get properties declared in the constructor
+            $constructor = $node->getMethod('__construct');
+            if ($constructor) {
+                foreach ($constructor->getParams() as $param) {
+                    if ($param->flags !== 0) {
+                        $this->properties[] = $param->var->name;
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -82,7 +94,7 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
     {
         return new RuleDefinition('Converts the names of local variables to camelCase', [
             new CodeSample(
-            // code before
+                // code before
                 '$my_variable = 1;',
                 // code after
                 '$myVariable = 1;'
