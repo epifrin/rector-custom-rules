@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Epifrin\RectorCustomRules\RectorRules;
@@ -16,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
 {
+    /** @var array<string> */
     private array $privateMethods = [];
 
     public function getNodeTypes(): array
@@ -76,6 +78,10 @@ final class ConvertPrivateMethodsNameToCamelCaseRector extends AbstractRector
         }
 
         $methodCallName = $this->getName($node->name);
+
+        if ($methodCallName === null) {
+            return null;
+        }
 
         if (!in_array($methodCallName, $this->privateMethods, true)) {
             return null;

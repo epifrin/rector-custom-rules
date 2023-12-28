@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Epifrin\RectorCustomRules\RectorRules;
@@ -15,6 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
 {
+    /** @var array<string> */
     private array $properties = [];
 
     public function __construct(
@@ -45,7 +47,11 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
             $constructor = $node->getMethod('__construct');
             if ($constructor) {
                 foreach ($constructor->getParams() as $param) {
-                    if ($param->flags !== 0) {
+                    if (
+                        $param->flags !== 0 &&
+                        $param->var instanceof Node\Expr\Variable &&
+                        is_string($param->var->name)
+                    ) {
                         $this->properties[] = $param->var->name;
                     }
                 }
@@ -60,6 +66,10 @@ final class ConvertLocalVariablesNameToCamelCaseRector extends AbstractRector
     private function processVariable(Variable $node): ?Node
     {
         $currentName = $node->name;
+
+        if ($currentName instanceof Node\Expr) {
+            return null;
+        }
 
         if ($this->reservedKeywordAnalyzer->isNativeVariable($currentName)) {
             return null;
