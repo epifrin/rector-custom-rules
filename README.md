@@ -1,6 +1,12 @@
 # Rector Custom Rules
 These are three rector rules to convert private method name, to convert local variable name to camel case and to replace double quotes with single quotes in string literals.
 
+[![Build status](https://github.com/epifrin/rector-custom-rules/actions/workflows/build.yml/badge.svg)](https://github.com/epifrin/rector-custom-rules/actions/workflows/build.yml)
+[![Latest Stable Version](http://poser.pugx.org/epifrin/rector-custom-rules/v)](https://packagist.org/packages/epifrin/rector-custom-rules)
+[![PHP Version Require](http://poser.pugx.org/epifrin/rector-custom-rules/require/php)](https://packagist.org/packages/epifrin/rector-custom-rules)
+[![Total Downloads](http://poser.pugx.org/epifrin/rector-custom-rules/downloads)](https://packagist.org/packages/epifrin/rector-custom-rules)
+[![License](http://poser.pugx.org/epifrin/rector-custom-rules/license)](https://packagist.org/packages/epifrin/rector-custom-rules)
+
 ## Installation
 ```bash
 composer require --dev epifrin/rector-custom-rules
