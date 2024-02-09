@@ -9,8 +9,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\Core\Php\ReservedKeywordAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Php\ReservedKeywordAnalyzer;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
